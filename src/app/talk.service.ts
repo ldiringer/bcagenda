@@ -74,6 +74,14 @@ export class TalkService {
 
   }
 
+  setDayNumber(talks: Talk[]): void {
+    const startDay = 3; /* Wednesday */
+    for (const talk of talks) {
+      const date1 = new Date(talk.event_start);
+      talk.day = (date1.getDay() - startDay);
+    }
+  }
+
   private handleError(error: any): Promise<any> {
     return Promise.reject(error.message || error);
   }

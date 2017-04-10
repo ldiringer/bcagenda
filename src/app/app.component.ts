@@ -10,11 +10,12 @@ import { TalkService } from './talk.service';
 export class AppComponent implements OnInit, DoCheck {
 
   readonly savedTalksStorageKey = 'saved_talks';
+  readonly savedDayShown = 'saved_day_shown';
 
   showSelectedOnly = false;
   showTalkDescriptions = false;
   showSharePanel = false;
-  showDays: [false, true, true];
+  showDays: Array<boolean> = [true, true, true];
   shareUrl = '';
   shareUrlForQRCode = '';
 
@@ -55,6 +56,7 @@ export class AppComponent implements OnInit, DoCheck {
       this.talks = this.talkService.orderByDateThenVenue(talks);
       this.talkService.fixDates(talks);
       this.talkService.fixSpeakers(talks);
+      this.talkService.setDayNumber(talks);
       const selectedTalks = localStorage.getItem(this.savedTalksStorageKey);
       for (const talk of this.talks) {
         if (selectedTalks.indexOf('' + talk.id) > -1) {

@@ -6,6 +6,11 @@
   <label><input type="checkbox" [(ngModel)]="showSharePanel" />Partager mon programme</label>
   <label title="Afficher/Masquer les descriptions des talks"><input type="checkbox" [(ngModel)]="showTalkDescriptions" />Voir les descriptions</label>
 </nav>
+<section class="daybar">
+  <label title="Voir les talks du mercredi" ><input type="checkbox" [(ngModel)]="showDays[0]" />Mercredi</label>
+  <label title="Voir les talks du jeudi" ><input type="checkbox" [(ngModel)]="showDays[1]" />Jeudi</label>
+  <label title="Voir les talks du vendredi" ><input type="checkbox" [(ngModel)]="showDays[2]" />Vendredi</label>
+</section>
 <section class="share" *ngIf="showSharePanel">
   <div class="content">
     <div class="qrcode">
@@ -22,7 +27,7 @@
 </section>
 <main>
   <ng-template ngFor let-talk [ngForOf]="talks">
-    <div *ngIf="!showSelectedOnly || (showSelectedOnly && talk.selected)">
+    <div *ngIf="showDays[talk.day] && (!showSelectedOnly || (showSelectedOnly && talk.selected));">
       <article [ngClass]="{'selected':talk.selected}">
         <div class="timeslot" [attr.title]="'#' + talk.index + ' - ' + (talk.event_start | date:'EEEE') + ' de ' + (talk.event_start | date:'HH:mm') + ' à ' + (talk.event_end | date:'HH:mm')">
           {{ talk.event_start | date:'EEE'}}
