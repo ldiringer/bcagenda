@@ -1,1 +1,21 @@
-/* You can add global styles to this file, and also import other style files */
+html body {
+  font-family: Arial, Tahoma, sans-serif;
+  padding: 0;
+  margin: 0;
+  background: #05001b;
+  color: #ccc;
+  overflow-y: scroll;
+}
+
+footer {
+  background: #1d2246;
+  color: #ccc;
+  text-align: center;
+  padding: 10px;
+  a {
+    color: #ccc;
+    &:hover {
+      color: goldenrod;
+    }
+  }
+}

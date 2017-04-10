@@ -1,3 +1,51 @@
 <h1>
-  {{title}}
+  Your Agenda for BreizhCamp 2017
 </h1>
+<nav>
+  <label title="Voir seulement les talks sélectionnés" ><input type="checkbox" [(ngModel)]="showSelectedOnly" />Mon programme</label>
+  <label><input type="checkbox" [(ngModel)]="showSharePanel" />Partager mon programme</label>
+  <label title="Afficher/Masquer les descriptions des talks"><input type="checkbox" [(ngModel)]="showTalkDescriptions" />Voir les descriptions</label>
+</nav>
+<section class="share" *ngIf="showSharePanel">
+  <div class="content">
+    <div class="qrcode">
+      <div class="wrapper">
+        <img [attr.src]="'https://api.qrserver.com/v1/create-qr-code/?size=150x150&bgcolor=ccc&data=' + shareUrlForQRCode" alt="QR Code qui permet de consulter mon programme" />
+      </div>
+    </div>
+    <div class="instructions">
+      <p>Une fois que vous avez sélectionné vos talks, vous pouvez partager votre programme en utilisant l'URL ou le QR code ci-contre&nbsp;:</p>
+      <input type="text" [(ngModel)]="shareUrl" />
+      <p>Bon BreizhCamp 2017&nbsp;!</p>
+    </div>
+  </div>
+</section>
+<main>
+  <ng-template ngFor let-talk [ngForOf]="talks">
+    <div *ngIf="!showSelectedOnly || (showSelectedOnly && talk.selected)">
+      <article [ngClass]="{'selected':talk.selected}">
+        <div class="timeslot" [attr.title]="'#' + talk.index + ' - ' + (talk.event_start | date:'EEEE') + ' de ' + (talk.event_start | date:'HH:mm') + ' à ' + (talk.event_end | date:'HH:mm')">
+          {{ talk.event_start | date:'EEE'}}
+          {{ talk.event_start | date:'HH:mm'}}
+          {{ talk.event_end | date:'HH:mm' }}
+        </div>
+        <div class="details">
+          <label [title]="talk.description">
+            <input type="checkbox" [(ngModel)]="talk.selected" />
+            {{ talk.name }}
+          </label>
+          <div class="tags">
+            <span class="format">{{ talk.format }}</span>
+            <span class="venue">{{ talk.venue }}</span>
+            <span class="speakers">{{ talk.speakers }}</span>
+            <span *ngIf="!showTalkDescriptions">- <button class="forceDescription" (click)="talk.show_description=!talk.show_description" title="Afficher/Masquer la description de ce talk">En savoir plus&hellip;</button></span>
+          </div>
+          <p *ngIf="showTalkDescriptions || talk.show_description">{{ talk.description }}</p>
+        </div>
+      </article>
+    </div>
+  </ng-template>
+</main>
+<footer>
+  Cette application n'est pas affilée au <a href="http://www.breizhcamp.org">BreizhCamp</a>. Le code est disponible en <a href="http://www.github.com">open source</a>.
+</footer>

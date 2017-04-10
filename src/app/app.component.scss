@@ -1,0 +1,208 @@
+$bg1: #0f1b31;
+$tx1: #ddd;
+$bg2: #1d2246;
+$bg3: #48478d;
+$bg4: goldenrod;
+
+h1 {
+  margin: 0;
+  background-color: $bg1;
+  color: $tx1;
+  text-align: center;
+  font-size: 14pt;
+  transition: font-size 0.3s;
+  font-variant: small-caps;
+  font-weight: normal;
+}
+
+nav {
+  background: $bg2;
+  padding: 10px 10px 2px 10px;
+
+  label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 10px;
+    border-radius: 1px;
+    background: $bg3;
+    color: white;
+    padding: 5px;
+    cursor: pointer;
+  }
+}
+
+section.share {
+  background-color: $bg1;
+  padding: 10px;
+
+  .content {
+    display: table;
+    height: 150px;
+
+    .qrcode {
+      display: table-cell;
+      width: 150px;
+      padding-right: 10px;
+
+      .wrapper {
+        position: absolute;
+        height: 150px;
+        width: 150px;
+        background-color: $bg2;
+      }
+    }
+
+    .instructions {
+      display: table-cell;
+      padding: 0 5px;
+
+      p {
+        padding: 0;
+        margin: 18px 0 10px 0;
+      }
+
+      input {
+        box-sizing: border-box;
+        width: 100%;
+        background-color: #ccc;
+        border: 1px solid #666;
+        padding: 10px;
+      }
+
+      input + p {
+        margin: 10px 0 0 0;
+      }
+
+    }
+  }
+}
+
+
+section.make-my-own {
+  background-color: $bg1;
+  padding: 10px;
+  text-align: center;
+
+  a {
+    color: #ccc;
+    &:hover {
+      color: $bg4;
+    }
+  }
+}
+
+main {
+
+  padding: 10px 10px 0 10px;
+
+  article {
+    display: table;
+    width: 100%;
+    margin-bottom: 10px;
+
+    .timeslot {
+      display: table-cell;
+      width: 50px;
+      text-align: center;
+
+      &:first-letter {
+        text-transform: uppercase;
+      }
+    }
+
+    &.selected .details {
+      border-color: $bg4;
+    }
+
+    .details {
+      display: table-cell;
+      border-left: 4px solid $bg2;
+      transition: border-color 0.3s;
+      padding: 0 0 5px 6px;
+
+      p {
+        margin-bottom: 0;
+      }
+    }
+
+    &.selected label {
+      background: $bg4;
+      color: black;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+      background: $bg2;
+      border-radius: 1px;
+      padding: 5px;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+
+      &.readonly {
+        cursor: initial;
+      }
+    }
+
+    .tags {
+      display: block;
+    }
+
+    span {
+      height: 25px;
+      line-height: 25px;
+    }
+
+    .format, .venue {
+      display: inline-block;
+      font-weight: bold;
+      background: $bg3;
+      color: white;
+      padding: 0 5px;
+      border-radius: 1px;
+    }
+
+    .forceDescription {
+      display: inline-block;
+      color: #ccc;
+      background-color: transparent;
+      border: 0;
+      padding: 0;
+      font-size: 12pt;
+      cursor: pointer;
+      text-decoration: underline;
+
+      &:hover {
+        color: $bg4;
+        text-decoration: none;
+      }
+    }
+  }
+
+}
+
+@media (min-width:768px) {
+  h1 {
+    font-size: 27pt;
+  }
+
+  nav {
+    text-align: center;
+    padding-bottom: 12px;
+
+    label {
+      display: inline;
+      padding-right: 9px;
+    }
+  }
+
+  main, section .content {
+    width: 768px;
+    margin: 0 auto;
+  }
+
+
+
+}
