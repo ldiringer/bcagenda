@@ -35,12 +35,7 @@ export class AppComponent implements OnInit, DoCheck {
       return;
     }
 
-    const selectedTalks = [];
-    for (const talk of this.talks) {
-      if (talk.selected) {
-        selectedTalks.push(talk.id);
-      }
-    }
+    const selectedTalks = this.talks.filter(talk => talk.selected).map(talk => talk.id);
 
     const changes = this.differ.diff(selectedTalks);
     if (changes) {
@@ -53,16 +48,13 @@ export class AppComponent implements OnInit, DoCheck {
 
   getTalks(): void {
     this.talkService.getTalks().then(talks => {
-      this.talks = this.talkService.orderByDateThenVenue(talks);
-      this.talkService.fixDates(talks);
-      this.talkService.fixSpeakers(talks);
-      this.talkService.setDayNumber(talks);
+      this.talks = talks;
       const selectedTalks = localStorage.getItem(this.savedTalksStorageKey);
-      for (const talk of this.talks) {
-        if (selectedTalks.indexOf('' + talk.id) > -1) {
+      this.talks.forEach(talk => {
+        if (selectedTalks && selectedTalks.indexOf('' + talk.id) > -1) {
           talk.selected = true;
         }
-      }
+      });
     });
   }
 

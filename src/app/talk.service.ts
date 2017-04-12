@@ -1,89 +1,81 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
-import { Talk } from './talk';
+import { ApiTalk, Talk } from './talk';
+
+import * as storage from 'localforage';
 
 import 'rxjs/add/operator/toPromise';
+
+const STORAGE_KEY = 'talks';
+const START_DAY = 3;
+const TALKS_API_URL = 'https://api.cfp.io/api/schedule';
+const TIME_ZONE_DIFFERENCE_BETWEEN_UTC_AND_CET = 2;
+
+const comparator = {
+  talk(current: ApiTalk, next: ApiTalk) {
+    if (current.event_start > next.event_start) {
+      return 1;
+    }
+    if (current.event_start < next.event_start) {
+      return -1;
+    }
+    if (current.venue > next.venue) {
+      return 1;
+    }
+    if (current.venue < next.venue) {
+      return -1;
+    }
+    return 0;
+  }
+};
 
 @Injectable()
 export class TalkService {
 
-  private headers = new Headers({'X-Tenant-Id': 'breizhcamp'});
-  private urlTalks = 'https://api.cfp.io/api/schedule';
-
   constructor(private http: Http) { }
 
   getTalks(): Promise<Talk[]> {
-    return this.http.get(this.urlTalks, {headers: this.headers})
+    return storage.getItem(STORAGE_KEY).then(talks => talks || this.fetch())
+  }
+
+  private fetch(): Promise<Talk[]> {
+    const headers = new Headers({'X-Tenant-Id': 'breizhcamp'});
+    return this.http.get(TALKS_API_URL, { headers })
                .toPromise()
-               .then(response => response.json() as Talk[])
-               .catch(this.handleError);
+               .then(response => response.json() as ApiTalk[])
+               .then(talks => this.normalize(talks))
+               .then(talks => this.persist(talks))
+               .catch(error => Promise.reject(error.message || error));
   }
 
-  orderByDateThenVenue(talks: Talk[]): Talk[] {
-    talks.sort((n1, n2) => {
-      if (n1.event_start > n2.event_start) {
-        return 1;
-      }
-      if (n1.event_start < n2.event_start) {
-        return -1;
-      }
-      if (n1.venue > n2.venue) {
-        return 1;
-      }
-      if (n1.venue < n2.venue) {
-        return -1;
-      }
-      return 0;
+  private persist(talks: Talk[]): Promise<Talk[]> {
+    return storage.setItem(STORAGE_KEY, talks);
+  }
+
+  private normalize(talks: ApiTalk[]): Talk[] {
+    return talks.sort(comparator.talk).map((talk, index) => {
+      const event_start = new Date(talk.event_start);
+      event_start.setHours(event_start.getHours() - TIME_ZONE_DIFFERENCE_BETWEEN_UTC_AND_CET);
+
+      const event_end = new Date(talk.event_end);
+      event_end.setHours(event_end.getHours() - TIME_ZONE_DIFFERENCE_BETWEEN_UTC_AND_CET);
+
+      const day = event_start.getDay() - START_DAY;
+
+      const speakers = talk.speakers.split(',').filter(speaker => speaker && speaker.trim());
+
+      return {
+        ...talk,
+        index,
+        day,
+        show_description: false,
+        selected: false,
+        speakers,
+        event_start,
+        event_end,
+        venue_id: parseInt(talk.venue_id, 10)
+      };
     });
-
-    // Set index
-    for (let i = 0; i < talks.length; ++i) {
-      talks[i].index = i + 1;
-    }
-
-    return talks;
-  }
-
-  fixDates(talks: Talk[]): void {
-    const timeZoneDifferenceBetweenUTCAndCET = 2;
-
-    for (let i = 0; i < talks.length; ++i) {
-      const date1 = new Date(talks[i].event_start);
-      date1.setHours(date1.getHours() - timeZoneDifferenceBetweenUTCAndCET);
-      talks[i].event_start = date1;
-
-      const date2 = new Date(talks[i].event_end);
-      date2.setHours(date2.getHours() - timeZoneDifferenceBetweenUTCAndCET);
-      talks[i].event_end = date2;
-    }
-  }
-
-  fixSpeakers(talks: Talk[]): void {
-    for (let i = 0; i < talks.length; ++i) {
-      const talk = talks[i];
-      const speakers = talk.speakers.split(',');
-      const fixedSpeakers = [];
-      for (let n = 0; n < speakers.length; ++n) {
-        const speaker = speakers[n].trim();
-        if (speaker.length > 0 && speaker.indexOf('null') !== 0) {
-          fixedSpeakers.push(speaker);
-        }
-      }
-      talk.speakers = fixedSpeakers.join(', ');
-    }
-
-  }
-
-  setDayNumber(talks: Talk[]): void {
-    const startDay = 3; /* Wednesday */
-    for (const talk of talks) {
-      const date1 = new Date(talk.event_start);
-      talk.day = (date1.getDay() - startDay);
-    }
-  }
-
-  private handleError(error: any): Promise<any> {
-    return Promise.reject(error.message || error);
   }
 
 }
