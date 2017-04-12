@@ -23,9 +23,7 @@ export class ShareComponent implements OnInit {
 
   getTalks(): void {
     this.talkService.getTalks().then(talks => {
-      this.talks = this.talkService.orderByDateThenVenue(talks);
-      this.talkService.fixDates(talks);
-      this.talkService.fixSpeakers(talks);
+      this.talks = talks;
       const selectedTalks = location.hash + ',';
       for (const talk of this.talks) {
         if (selectedTalks.indexOf(talk.id + ',') > -1) {

@@ -1,0 +1,12 @@
+{
+	"name": "BreizhC@amp 2017 Agenda",
+	"short_name": "BCA 2017",
+	"icons": [
+
+	],
+	"theme_color": "#F36F21",
+  "background_color": "#F36F21",
+	"display": "standalone",
+	"orientation": "portrait",
+	"start_url": "./?utm_source=web_app_manifest"
+}

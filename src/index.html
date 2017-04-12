@@ -9,5 +9,16 @@
 </head>
 <body>
   <app-root><p style="padding: 0 10px">Chargement des talks...</p></app-root>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js').then((registration) => {
+        // Registration was successful
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      }).catch((error) => {
+        // registration failed :(
+        console.log('ServiceWorker registration failed: ', error);
+      });
+    }
+  </script>
 </body>
 </html>
