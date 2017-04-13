@@ -43,7 +43,7 @@
             <span class="format">{{ talk.format }}</span>
             <span class="venue">{{ talk.venue }}</span>
             <span class="speakers">{{ talk.speakers }}</span>
-            <span *ngIf="!showTalkDescriptions">- <button class="forceDescription" (click)="talk.show_description=!talk.show_description" title="Afficher/Masquer la description de ce talk">En savoir plus&hellip;</button></span>
+            <span *ngIf="!showTalkDescriptions">- <button class="forceDescription" (click)="talk.show_description=!talk.show_description" title="Afficher/Masquer la description de ce talk">en savoir plus&hellip;</button></span>
           </div>
           <p *ngIf="showTalkDescriptions || talk.show_description">{{ talk.description }}</p>
         </div>

@@ -62,7 +62,8 @@ export class TalkService {
 
       const day = event_start.getDay() - START_DAY;
 
-      const speakers = talk.speakers.split(',').filter(speaker => speaker && speaker.trim());
+      const speakers = talk.speakers.split(',').filter(speaker => speaker && speaker.trim() &&
+                                                       speaker.trim().indexOf('null') !== 0);
 
       return {
         ...talk,
