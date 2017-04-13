@@ -18,12 +18,14 @@ export class AppComponent implements OnInit, DoCheck {
   showDays: Array<boolean> = [true, true, true];
   shareUrl = '';
   shareUrlForQRCode = '';
+  isSecuredURLScheme: boolean;
 
   @Input() talks: Talk[];
   differ: any;
 
   constructor(private talkService: TalkService, private differs: KeyValueDiffers) {
     this.differ = differs.find({}).create(null);
+    this.isSecuredURLScheme = location.protocol.indexOf('https') === 0;
   }
 
   ngOnInit(): void {
@@ -56,6 +58,10 @@ export class AppComponent implements OnInit, DoCheck {
         }
       });
     });
+  }
+
+  buildSecuredSchemeURL(): string {
+    return location.href.replace('http://', 'https://');
   }
 
 }

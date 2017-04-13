@@ -233,6 +233,19 @@ main {
     margin: 0 auto;
   }
 
-
-
 }
+
+.security-warning {
+  display: block;
+  text-align: center;
+  line-height: 30px;
+  font-size: 12pt;
+  background: $bg4;
+  color: black;
+  text-decoration: underline;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
