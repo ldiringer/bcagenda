@@ -1,5 +1,5 @@
-# Your agenda for BreizhCamp 2017
-This single-page application lists the different talks for the BreizhCamp event, 2017 edition.  
+# Your agenda for BreizhCamp 2018
+This single-page application lists the different talks for the BreizhCamp event, 2018 edition.  
 It allows you to select which talks you are going to attend in order to build you an agenda you can follow during the event.  
 Your selections are saved in the browser memory (local storage): no information are stored on a server.  
 You can share your agenda thanks to custom QR Code and URL.  
